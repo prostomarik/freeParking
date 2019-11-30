@@ -3,7 +3,6 @@ import cv2
 import mrcnn.config
 import mrcnn.utils
 from mrcnn.model import MaskRCNN
-from pathlib import Path
 
 from utils import *
 
@@ -27,76 +26,58 @@ def get_car_boxes(boxes, class_ids):
 
     return np.array(car_boxes)
 
+# !!для теста!! получаем координаты машины на первой картинке видео
+def get_cars(frame, model):
+   
 
-# Загружаем датасет COCO при необходимости.
-if not COCO_MODEL_PATH.exists():
-    mrcnn.utils.download_trained_weights(COCO_MODEL_PATH)
-
-
-# Видеофайл или камера для обработки — вставьте значение 0, если нужно использовать камеру, а не видеофайл.
-VIDEO_SOURCE =  "../testData/test.mp4"
-
-# Создаём модель Mask-RCNN в режиме вывода.
-model = MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=MaskRCNNConfig())
-
-# Загружаем предобученную модель.
-model.load_weights(str(COCO_MODEL_PATH), by_name=True)
-
-# Местоположение парковочных мест.
-parked_car_boxes = None
-
-# Загружаем видеофайл, для которого хотим запустить распознавание.
-video_capture = cv2.VideoCapture(VIDEO_SOURCE)
-
-
-# Проходимся в цикле по каждому кадру.
-while video_capture.isOpened():
-
-    
-	success, frame = video_capture.read()
-
-	if not success:
-		break
-
-    # Конвертируем изображение из цветовой модели BGR (используется OpenCV) в RGB.
 	rgb_image = frame[:, :, ::-1]
-
-    # Подаём изображение модели Mask R-CNN для получения результата.
     
 	results = model.detect([rgb_image], verbose=0)
 
-    # Mask R-CNN предполагает, что мы распознаём объекты на множественных изображениях.
-    # Мы передали только одно изображение, поэтому извлекаем только первый результат.
 	r = results[0]
-
-    # Переменная r теперь содержит результаты распознавания:
-    # - r['rois'] — ограничивающая рамка для каждого распознанного объекта;
-    # - r['class_ids'] — идентификатор (тип) объекта;
-    # - r['scores'] — степень уверенности;
-    # - r['masks'] — маски объектов (что даёт вам их контур).
-
-    # Фильтруем результат для получения рамок автомобилей.
 
 	car_boxes = get_car_boxes(r['rois'], r['class_ids'])
 
-	print("Cars found in frame of video:")
 
-    # Отображаем каждую рамку на кадре.
-	for box in car_boxes:
-		print("Car:", box)
+	return car_boxes
 
-		y1, x1, y2, x2 = box
+def load_model():
+	# Загружаем датасет COCO при необходимости.
+	if not COCO_MODEL_PATH.exists():
+	    mrcnn.utils.download_trained_weights(COCO_MODEL_PATH)
 
-        # Рисуем рамку.
-		cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 1)
 
-    # Показываем кадр на экране.
-	cv2.imshow('Video', frame)
+	# Видеофайл или камера для обработки — вставьте значение 0, если нужно использовать камеру, а не видеофайл.
+	VIDEO_SOURCE =  "../tests/testData/test1_1.mp4"
 
-    # Нажмите 'q', чтобы выйти.
-	if cv2.waitKey(1) & 0xFF == ord('q'):
-		break
+	# Создаём модель Mask-RCNN в режиме вывода.
+	model = MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=MaskRCNNConfig())
 
-# Очищаем всё после завершения.
-video_capture.release()
-cv2.destroyAllWindows()
+	# Загружаем предобученную модель.
+	model.load_weights(str(COCO_MODEL_PATH), by_name=True)
+
+
+	# Загружаем видеофайл, для которого хотим запустить распознавание.
+	video_capture = cv2.VideoCapture(VIDEO_SOURCE)
+	return video_capture, model
+def clear(video_capture):
+	video_capture.release()
+	cv2.destroyAllWindows()
+
+def action():
+	# Проходимся в цикле по каждому кадру.
+	video_capture, model = load_model()
+
+	while video_capture.isOpened():
+
+		success, frame = video_capture.read()
+
+		if not success:
+			break
+
+		car_boxes = get_cars(frame, model)
+
+	    # Отображаем каждую рамку на кадре.
+		for box in car_boxes:
+			print( "[", box[0], ",", box[1], ",", box[2], ",", box[3], "],")
+	clear(video_capture)
