@@ -5,6 +5,7 @@ import mrcnn.utils
 from mrcnn.model import MaskRCNN
 from pathlib import Path
 
+from utils import *
 
 # Конфигурация, которую будет использовать библиотека Mask-RCNN.
 class MaskRCNNConfig(mrcnn.config.Config):
@@ -27,15 +28,6 @@ def get_car_boxes(boxes, class_ids):
     return np.array(car_boxes)
 
 
-# Корневая директория проекта.
-ROOT_DIR = Path("/Users/vasiliyisaev/bonch_hack/car_detector2")
-
-# Директория для сохранения логов и обученной модели.
-MODEL_DIR = ROOT_DIR / "logs"
-
-# Локальный путь к файлу с обученными весами.
-COCO_MODEL_PATH = ROOT_DIR / "mask_rcnn_coco.h5"
-
 # Загружаем датасет COCO при необходимости.
 if not COCO_MODEL_PATH.exists():
     mrcnn.utils.download_trained_weights(COCO_MODEL_PATH)
@@ -57,21 +49,11 @@ parked_car_boxes = None
 video_capture = cv2.VideoCapture(VIDEO_SOURCE)
 
 
-import timeit
-
-
-
-
 # Проходимся в цикле по каждому кадру.
 while video_capture.isOpened():
-	start = timeit.default_timer()
+
     
 	success, frame = video_capture.read()
-
-	stop = timeit.default_timer()
-
-	print('video_capture.read() ', timeit.default_timer() - start) 
-	start = timeit.default_timer()
 
 	if not success:
 		break
@@ -83,11 +65,6 @@ while video_capture.isOpened():
     
 	results = model.detect([rgb_image], verbose=0)
 
-	stop = timeit.default_timer()
-
-	print('model detect time: ', timeit.default_timer() - start) 
-
-	start = timeit.default_timer()
     # Mask R-CNN предполагает, что мы распознаём объекты на множественных изображениях.
     # Мы передали только одно изображение, поэтому извлекаем только первый результат.
 	r = results[0]
