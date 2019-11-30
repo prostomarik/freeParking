@@ -25,7 +25,6 @@
 *.log
 *.sql
 *.sqlite
-*.h5
 # OS generated files #
 ######################
 .DS_Store
@@ -35,3 +34,6 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+# model and video for testing #
+*.h5
+*.mp4
