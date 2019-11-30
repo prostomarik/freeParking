@@ -48,7 +48,7 @@ def load_model():
 
 
 	# Видеофайл или камера для обработки — вставьте значение 0, если нужно использовать камеру, а не видеофайл.
-	VIDEO_SOURCE =  "../tests/testData/test1_1.mp4"
+	VIDEO_SOURCE =  "tests/testData/test1_1.mp4"
 
 	# Создаём модель Mask-RCNN в режиме вывода.
 	model = MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=MaskRCNNConfig())
@@ -76,8 +76,6 @@ def action():
 			break
 
 		car_boxes = get_cars(frame, model)
+		return car_boxes
 
-	    # Отображаем каждую рамку на кадре.
-		for box in car_boxes:
-			print( "[", box[0], ",", box[1], ",", box[2], ",", box[3], "],")
 	clear(video_capture)
