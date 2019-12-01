@@ -37,8 +37,8 @@ def update(link):
 def load_exchange(URL):
     return requests.get(URL).text
 
-URL0 = 'http://7f4f2621.ngrok.io/0'
-URL1 = 'http://7f4f2621.ngrok.io/1'
+URL0 = 'http://8851ee31.ngrok.io/0'
+URL1 = 'http://8851ee31.ngrok.io/1'
 
 @bot.message_handler(commands=['start'])
 def start_command(message):
@@ -61,7 +61,8 @@ def exchange_command(message):
         telebot.types.InlineKeyboardButton('update and photo', callback_data='new')
     )
     keyboard.row(
-        telebot.types.InlineKeyboardButton('add camera', callback_data='add_camera')
+        telebot.types.InlineKeyboardButton('add camera', callback_data='add_camera'),
+        telebot.types.InlineKeyboardButton('count free spaces', callback_data='count')
     )
     bot.send_message(
         message.chat.id,
@@ -79,6 +80,45 @@ def iq_callback(query):
         new_info(query)
     if data.startswith('add_camera'): # 3
         add_camera(query)
+    if data.startswith('count'): # 4
+        count(query)
+
+
+def count(query): # 4.1
+    bot.answer_callback_query(query.id)
+    user_id = query.from_user.id
+    print(hack_user_database.getinfo(user_id),user_id)
+    ask_user_for_chosing2(query.message, user_id)
+
+
+def ask_user_for_chosing2(message,user_id): # 4.2
+    bot.send_chat_action(message.chat.id, 'typing')
+    ids = hack_user_database.getinfo(user_id)
+    msg = bot.reply_to(message, 'choose camera id from:\n'+str(ids))
+    bot.register_next_step_handler(msg, update_and_send_count)
+
+
+def update_and_send_count(message): # 4.3
+    x = message.text.split('\n')
+    print(x)
+    if len(x) == 1 and is_number(x[0]): # correct input?
+        if hack_user_database.getinfo(message.from_user.id) != None:
+            bad = json.loads(load_exchange(URL0))["bisy_places"]
+            time.sleep(5)
+            good = json.loads(load_exchange(URL1))["free_places"]
+            rez=[bad, good]
+            print(rez)
+            hack_dvor_database.update_latest(x[0], rez)
+            #bot.send_message(message.chat.id, 'some information about dvor'+str(x[0]) + str(hack_dvor_database.getinfo(x[0])[0]))
+            bot.send_message(message.chat.id, len(rez[1]))
+        else:
+           msg = bot.reply_to(message, 'no such camera id \n try another one')
+           bot.register_next_step_handler(msg, update_and_send_info_one_dvor)
+    else:
+        bot.send_chat_action(message.chat.id, 'typing')
+        msg = bot.reply_to(message, 'incorrect input \n you shoud write smth like this:')
+        bot.send_message(message.chat.id, '123')
+        bot.register_next_step_handler(msg, update_and_send_info_one_dvor)
 
 
 def new_info(query): # 2.1
@@ -91,7 +131,7 @@ def new_info(query): # 2.1
 def ask_user_for_chosing(message,user_id): # 2.2
     bot.send_chat_action(message.chat.id, 'typing')
     ids = hack_user_database.getinfo(user_id)
-    msg = bot.reply_to(message, 'print dvor id from:\n'+str(ids))
+    msg = bot.reply_to(message, 'choose camera id from:\n'+str(ids))
     bot.register_next_step_handler(msg, update_and_send_info_one_dvor)
 
 
@@ -116,7 +156,7 @@ def update_and_send_info_one_dvor(message): # 2.3
             foto = open('./map.jpg', 'rb')
             bot.send_photo(message.chat.id, foto)
         else:
-           msg = bot.reply_to(message, 'no such dvor id \n try another one')
+           msg = bot.reply_to(message, 'no such camera id \n try another one')
            bot.register_next_step_handler(msg, update_and_send_info_one_dvor)
     else:
         bot.send_chat_action(message.chat.id, 'typing')
@@ -149,7 +189,7 @@ def get_answer_choose_camera(message): # 3.3
                 hack_user_database.create_new_dvor_for_user(message.from_user.id,x[0])
                 bot.send_message(message.chat.id, 'added')
             else:
-               msg = bot.reply_to(message, 'this dvor id is already existed \n try another one or write No')
+               msg = bot.reply_to(message, 'this camera id is already existed \n try another one or write No')
                bot.register_next_step_handler(msg, get_answer_choose_camera)
         else:
             bot.send_chat_action(message.chat.id, 'typing')
@@ -168,7 +208,7 @@ def give_one_info(query): # 1.1
 def ask_user_for_dvor_id(message,user_id): # 1.2
     bot.send_chat_action(message.chat.id, 'typing')
     ids = hack_user_database.getinfo(user_id)
-    msg = bot.reply_to(message, 'print dvor id from:\n'+str(ids))
+    msg = bot.reply_to(message, 'choose camera id from:\n'+str(ids))
     bot.register_next_step_handler(msg, send_info_one_dvor)
 
 
@@ -180,7 +220,7 @@ def send_info_one_dvor(message): # 1.3
         if hack_user_database.getinfo(message.from_user.id) != None:
             bot.send_message(message.chat.id, 'some information about space near house '+str(x[0]) + '\n' + str(hack_dvor_database.getinfo(x[0])[0]))
         else:
-           msg = bot.reply_to(message, 'no such dvor id \n try another one')
+           msg = bot.reply_to(message, 'no such camera id \n try another one')
            bot.register_next_step_handler(msg, send_info_one_dvor)
     else:
         bot.send_chat_action(message.chat.id, 'typing')
