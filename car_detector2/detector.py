@@ -2,9 +2,11 @@ import numpy as np
 import cv2
 import mrcnn.config
 import mrcnn.utils
+
 from mrcnn.model import MaskRCNN
 
 from utils import *
+from parkingPlaceDetector import *
 
 # Конфигурация, которую будет использовать библиотека Mask-RCNN.
 class MaskRCNNConfig(mrcnn.config.Config):
@@ -56,10 +58,10 @@ def load_model():
 	# Загружаем предобученную модель.
 	model.load_weights(str(COCO_MODEL_PATH), by_name=True)
 
-
 	# Загружаем видеофайл, для которого хотим запустить распознавание.
 	video_capture = cv2.VideoCapture(VIDEO_SOURCE)
 	return video_capture, model
+
 def clear(video_capture):
 	video_capture.release()
 	cv2.destroyAllWindows()
@@ -79,3 +81,23 @@ def action():
 		return car_boxes
 
 	clear(video_capture)
+def start_action():
+	# Проходимся в цикле по каждому кадру.
+	video_capture, model = load_model()
+
+	success, frame = video_capture.read()
+
+	if success:
+		
+
+		car_boxes = get_cars(frame, model)
+
+		get_user_parking(frame, car_boxes)
+		
+		clear(video_capture)
+	else:
+		print("error video loading")
+
+	return car_boxes
+
+	
