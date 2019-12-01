@@ -37,6 +37,7 @@ Thumbs.db
 # model and video for testing #
 *.h5
 *.mp4
+*.mov
 # python cached files #
 #######################
 __pycache__/
