@@ -1,4 +1,4 @@
-# bonch_hack
+# Bonch Hack 2019
 bonch_hack
 
 this is telegram bot for finding free space for parking
