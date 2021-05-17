@@ -107,7 +107,7 @@ def send_camera_info(update: Update, user_id, yard_id):
         raise e
 
 
-def send_photo_and_update(update: Update, user_id, ):
+def send_photo_and_update(update: Update, user_id):
     try:
         if hack_user_database.getinfo(user_id) is not None:
             reply_photo(update)
@@ -130,7 +130,7 @@ def reply_yard_info(update: Update, user_id, yard_id):
 
 
 def reply_photo(update: Update):
-    photo = open("/home/vasily/PycharmProjects/freeParking/simple_car_detectiong/output/newimage.jpg", 'rb')
+    photo = open("simple_car_detectiong/output/newimage.jpg", 'rb')
     update.message.reply_photo(photo)
 
 
