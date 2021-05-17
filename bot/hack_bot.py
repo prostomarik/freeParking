@@ -17,7 +17,6 @@ def start_command(update: Update, _: CallbackContext):
     hack_user_database.create_table_users()
     hack_user_database.create_new_user(update.message.from_user.id)
     print("--" + str(hack_user_database.getinfo(update.message.from_user.id)))
-    print( str(update.message.chat.id) + " ______________ ")
     for i in range(3):
         update.message.reply_text(
             'Greetings! I can show you free space for parking.\n' +
