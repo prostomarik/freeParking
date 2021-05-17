@@ -2,7 +2,7 @@ import sqlite3
 import json
 
 
-def create_table_users():  # if it is nesesary
+def create_table_cameras():  # if it is nesesary
     conn = sqlite3.connect("cameradatabase.db")
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS cameras
@@ -42,7 +42,7 @@ def is_id_in_table(id):  # True - in table; False - not in table
         return True
 
 
-def update_latest(camera_id, latest): # 2 - no user, 1 - user has this  dvor, 0 - updated
+def update_latest(camera_id, latest):  # 2 - no user, 1 - user has this  dvor, 0 - updated
     conn = sqlite3.connect("cameradatabase.db")
     cursor = conn.cursor()
     if not is_id_in_table(camera_id):
@@ -64,9 +64,9 @@ def delete_camera(id):
     print('camera ' + str(id) + " deleted")
 
 
-# create_table_users()
-# delete_camera(1)
-# create_new_camera(1, "ulica pushkina dom kolotushkina", {'lol': 'kek'})
-# print(getinfo(1))
-# update_latest(1, {'sasat': '+lezhat'})
-# print(getinfo(1))
+create_table_cameras()
+delete_camera(1)
+create_new_camera(1, "ulica pushkina dom kolotushkina", {'lol': 'kek'})
+print(getinfo(1))
+update_latest(1, {'sasat': '+lezhat'})
+print(getinfo(1))

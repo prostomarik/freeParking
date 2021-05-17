@@ -80,7 +80,7 @@ def delete_users_dvor(name, id): # 2 - no user, 1 - no dvor , 0 - updated
             conn.commit()
             return 0
         else:
-            print('no such dvor_id: '+str(deb)+' (delete_users_dvor)')
+            print('no such dvor_id: '+str(id)+' (delete_users_dvor)')
             return 1
 
 
@@ -88,16 +88,16 @@ def delete_user(name):
     conn = sqlite3.connect("userdatabase.db")
     cursor = conn.cursor()
     sql = "DELETE FROM users WHERE name = ?"
-    cursor.execute(sql, [(name)])
+    cursor.execute(sql, [name])
     conn.commit()
     print(str(name)+" deleted")
 
 
-# create_table_users()
-# delete_user('vasy')
-# create_new_user("vasy")
-# print(getinfo('vasy'))
-# create_new_dvor_for_user('vasy', '1')
-# print(getinfo('vasy'))
-# delete_users_dvor('vasy', '1')
-# print(getinfo('vasy'))
+create_table_users()
+delete_user('vasy')
+create_new_user("vasy")
+print(getinfo('vasy'))
+create_new_dvor_for_user('vasy', '1')
+print(getinfo('vasy'))
+delete_users_dvor('vasy', '1')
+print(getinfo('vasy'))

@@ -8,6 +8,7 @@ from mrcnn.model import MaskRCNN
 from utils import *
 from parkingPlaceDetector import *
 
+
 # Конфигурация, которую будет использовать библиотека Mask-RCNN.
 class MaskRCNNConfig(mrcnn.config.Config):
     NAME = "coco_pretrained_model_config"
@@ -28,76 +29,75 @@ def get_car_boxes(boxes, class_ids):
 
     return np.array(car_boxes)
 
+
 # !!для теста!! получаем координаты машины на первой картинке видео
 def get_cars(frame, model):
-   
+    rgb_image = frame[:, :, ::-1]
 
-	rgb_image = frame[:, :, ::-1]
-    
-	results = model.detect([rgb_image], verbose=0)
+    results = model.detect([rgb_image], verbose=0)
 
-	r = results[0]
+    r = results[0]
 
-	car_boxes = get_car_boxes(r['rois'], r['class_ids'])
+    car_boxes = get_car_boxes(r['rois'], r['class_ids'])
 
+    return car_boxes
 
-	return car_boxes
 
 def load_model():
-	# Загружаем датасет COCO при необходимости.
-	if not COCO_MODEL_PATH.exists():
-	    mrcnn.utils.download_trained_weights(COCO_MODEL_PATH)
+    # Загружаем датасет COCO при необходимости.
+    if not COCO_MODEL_PATH.exists():
+        mrcnn.utils.download_trained_weights(COCO_MODEL_PATH)
 
+    # Видеофайл или камера для обработки — вставьте значение 0, если нужно использовать камеру, а не видеофайл.
+    VIDEO_SOURCE = "tests/testData/test1_1.mp4"
 
-	# Видеофайл или камера для обработки — вставьте значение 0, если нужно использовать камеру, а не видеофайл.
-	VIDEO_SOURCE =  "tests/testData/test1_1.mp4"
+    # Создаём модель Mask-RCNN в режиме вывода.
+    model = MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=MaskRCNNConfig())
 
-	# Создаём модель Mask-RCNN в режиме вывода.
-	model = MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=MaskRCNNConfig())
+    # Загружаем предобученную модель.
+    model.load_weights(str(COCO_MODEL_PATH), by_name=True)
 
-	# Загружаем предобученную модель.
-	model.load_weights(str(COCO_MODEL_PATH), by_name=True)
+    # Загружаем видеофайл, для которого хотим запустить распознавание.
+    video_capture = cv2.VideoCapture(VIDEO_SOURCE)
+    return video_capture, model
 
-	# Загружаем видеофайл, для которого хотим запустить распознавание.
-	video_capture = cv2.VideoCapture(VIDEO_SOURCE)
-	return video_capture, model
 
 def clear(video_capture):
-	video_capture.release()
-	cv2.destroyAllWindows()
+    video_capture.release()
+    cv2.destroyAllWindows()
+
 
 def action():
-	# Проходимся в цикле по каждому кадру.
-	video_capture, model = load_model()
+    # Проходимся в цикле по каждому кадру.
+    video_capture, model = load_model()
 
-	while video_capture.isOpened():
+    while video_capture.isOpened():
 
-		success, frame = video_capture.read()
+        success, frame = video_capture.read()
 
-		if not success:
-			break
+        if not success:
+            break
 
-		car_boxes = get_cars(frame, model)
-		return car_boxes
+        car_boxes = get_cars(frame, model)
+        return car_boxes
 
-	clear(video_capture)
+    clear(video_capture)
+
+
 def start_action():
-	# Проходимся в цикле по каждому кадру.
-	video_capture, model = load_model()
+    # Проходимся в цикле по каждому кадру.
+    video_capture, model = load_model()
 
-	success, frame = video_capture.read()
+    success, frame = video_capture.read()
 
-	if success:
-		
+    if success:
 
-		car_boxes = get_cars(frame, model)
+        car_boxes = get_cars(frame, model)
 
-		get_user_parking(frame, car_boxes)
-		
-		clear(video_capture)
-	else:
-		print("error video loading")
+        get_user_parking(frame, car_boxes)
 
-	return car_boxes
+        clear(video_capture)
+    else:
+        print("error video loading")
 
-	
+    return car_boxes
