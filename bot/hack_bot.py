@@ -130,7 +130,7 @@ def reply_yard_info(update: Update, user_id, yard_id):
 
 
 def reply_photo(update: Update):
-    photo = open("simple_car_detectiong/output/newimage.jpg", 'rb')
+    photo = open("/home/runner/work/freeParking/freeParkingsimple_car_detectiong/output/newimage.jpg", 'rb')
     update.message.reply_photo(photo)
 
 
