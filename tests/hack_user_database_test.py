@@ -7,7 +7,7 @@ from tests.hack_dvor_database_test import checkTableExists
 
 def test_create_table_users():
     create_table_users()
-    assert checkTableExists("users", "/home/vasily/PycharmProjects/freeParking/bot/userdatabase.db")
+    assert checkTableExists("users", "/home/runner/work/freeParking/freeParking/bot/userdatabase.db")
 
 
 def test_is_user_in_table():
