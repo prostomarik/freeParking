@@ -29,10 +29,16 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Path
+    - name: Coverage
       run: |
-        pwd
-
+        coverage run --omit 'env/*' -m pytest
+        coverage report -i
+    - name: Integration
+      run: |
+        python3 tests/bot_tests_integration.py
+    - name: END-TO-END
+      run: |
+        python3 tests/integration_with_mock.py
     - name: Test with pytest
       run: |
         pytest tests/
