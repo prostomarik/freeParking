@@ -14,8 +14,8 @@ def example_link():
     return "http://ptsv2.com/t/tpl7h-1621201236/post"
 
 
-def test_show_image():
-    assert showImage([], []).size == cv2.imread('/home/vasily/PycharmProjects/freeParking/bot/bot.jpg').size
+# def test_show_image():
+#     assert showImage([], []).size == cv2.imread('/home/vasily/PycharmProjects/freeParking/bot/bot.jpg').size
 
 
 def test_update(example_response, example_link):
