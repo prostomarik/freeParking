@@ -1,7 +1,8 @@
 import asyncio
 import pytest
-from tgintegration import BotController
+# from tgintegration import BotController
 from pyrogram import Client
+from unittest.mock import create_autospec
 
 api_id = "4478707"
 api_hash = "ab986f838373378c37f0bb6bd0a6ac1e"
@@ -13,15 +14,15 @@ client = Client(
     api_hash=api_hash
 )
 
-controller = BotController(
-    peer="@taskFreeSolverbot",  # The bot under test is https://t.me/BotListBot 🤖
-    client=client,  # This assumes you already have a Pyrogram user client available
-    max_wait=60,  # Maximum timeout for responses (optional)
-    wait_consecutive=2,  # Minimum time to wait for more/consecutive messages (optional)
-    raise_no_response=True,  # Raise `InvalidResponseError` when no response is received (defaults to True)
-    global_action_delay=7  # Choosing a rather high delay so we can observe what's happening (optional)
-)
 
+# controller = BotController(
+#     peer="@taskFreeSolverbot",  # The bot under test is https://t.me/BotListBot 🤖
+#     client=client,  # This assumes you already have a Pyrogram user client available
+#     max_wait=60,  # Maximum timeout for responses (optional)
+#     wait_consecutive=2,  # Minimum time to wait for more/consecutive messages (optional)
+#     raise_no_response=True,  # Raise `InvalidResponseError` when no response is received (defaults to True)
+#     global_action_delay=7  # Choosing a rather high delay so we can observe what's happening (optional)
+# )
 
 async def integration_start():
     await client.send_message("@taskFreeSolverbot", "/start")
@@ -184,7 +185,7 @@ async def run_test_all():
             await item()
             right += 1
         except Exception as e:
-            print(f"filed {item.__name__} with {e}")
+            print(f"failed {item.__name__}")
             wrong += 1
     print(f"report: correct: {right} failed: {wrong}")
 
