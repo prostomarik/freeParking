@@ -3,9 +3,9 @@ from imageai.Detection import ObjectDetection
 
 def detect_img(pict_name):
     detector = ObjectDetection()
-    model_path = "/home/vasily/PycharmProjects/freeParking/simple_car_detectiong/models/yolo-tiny.h5"
-    input_path = f"/home/vasily/PycharmProjects/freeParking/simple_car_detectiong/inputs/{pict_name}"
-    output_path = "/home/vasily/PycharmProjects/freeParking/simple_car_detectiong/output/newimage.jpg"
+    model_path = "/home/runner/work/freeParking/freeParking/simple_car_detectiong/models/yolo-tiny.h5"
+    input_path = f"/home/runner/work/freeParking/freeParking/simple_car_detectiong/inputs/{pict_name}"
+    output_path = "/home/runner/work/freeParking/freeParking/simple_car_detectiong/output/newimage.jpg"
 
     detector.setModelTypeAsTinyYOLOv3()
     detector.setModelPath(model_path)
