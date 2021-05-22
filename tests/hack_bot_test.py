@@ -61,10 +61,46 @@ def test_choose_mode_wrong_send_photo_data(updater, callback_context):
 def test_choose_mode_correct_send_photo_data_text(updater, callback_context):
     updater.message.text = "send_photo vasy"
     choose_mode(updater, callback_context)
-    assert updater.message.reply_text_answer == None
+    assert updater.message.reply_text_answer is None
 
 
 def test_choose_mode_correct_send_photo_data_media(updater, callback_context):
     updater.message.text = "send_photo vasy"
     choose_mode(updater, callback_context)
     assert updater.message.reply_photo_answer is not None
+
+
+def test_choose_mode_wrong_add_camera_data(updater, callback_context):
+    updater.message.text = "add_camera 1 1"
+    choose_mode(updater, callback_context)
+    assert updater.message.reply_text_answer == 'this camera id is already existed \n try another one or write No'
+
+
+def test_choose_mode_correct_add_camera_data_text(updater, callback_context):
+    updater.message.text = "add_camera vasy"
+    choose_mode(updater, callback_context)
+    assert updater.message.reply_text_answer == "write user id and yard id in format: add_camera user_id camera_id"
+
+
+def test_choose_mode_correct_add_camera_data_media(updater, callback_context):
+    updater.message.text = "add_camera vasy"
+    choose_mode(updater, callback_context)
+    assert updater.message.reply_photo_answer is None
+
+
+def test_choose_mode_wrong_count_data(updater, callback_context):
+    updater.message.text = "count 1 1"
+    choose_mode(updater, callback_context)
+    assert updater.message.reply_text_answer == 'write user id and yard id in format: add_camera user_id camera_id'
+
+
+def test_choose_mode_correct_count_data_text(updater, callback_context):
+    updater.message.text = "count vasy"
+    choose_mode(updater, callback_context)
+    assert updater.message.reply_text_answer == "41"
+
+
+def test_choose_mode_correct_count_data_media(updater, callback_context):
+    updater.message.text = "count vasy"
+    choose_mode(updater, callback_context)
+    assert updater.message.reply_photo_answer is None
