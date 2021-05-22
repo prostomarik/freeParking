@@ -16,7 +16,7 @@ def checkTableExists(tablename, url):
 
 def test_create_table_cameras():
     create_table_cameras()
-    assert checkTableExists("cameras", "/home/vasily/PycharmProjects/freeParking/bot/cameradatabase.db")
+    assert checkTableExists("cameras", "/home/runner/work/freeParking/freeParking/bot/cameradatabase.db")
 
 
 def test_create_new_camera():
