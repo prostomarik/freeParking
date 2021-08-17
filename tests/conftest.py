@@ -5,6 +5,6 @@ from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.custom.message import Message
 
-api_id = "4478707"
-api_hash = "ab986f838373378c37f0bb6bd0a6ac1e"
-session_str = "1ApWapzMBu7x4E43vtsSlQzufDjuWAP-Qs5wPsjWv-1ZHq6lquRVljgAa793oLb_mFhQaBnqBMEEBEJ85BaxU5Z1A9nLf16fFh4bTliJ_yYI5s4HJNDJtsQIk2nfND9bT1H2iiNWqMafTxLRPkz8NQ5yk6dTih3ng6hRKvY2nimgpxrCk0yLFCn1N0awZGqKiPAM-QbOYp8rfOBGibKu9Uw7lyyC-OTDfKscyq05FdMEZotTfP_fOS4yxVzsEiNqLFsb0EJ_QSl15VEGfo9PSq7SytGpDqPUxG62YeTdqKu4QpcJSLJQfVx2_sgXGMFjcUpSQRPpTZPfC6A8bm8QvC93ay9RkV9M="
+api_id = ""
+api_hash = ""
+session_str = ""
