@@ -6,12 +6,12 @@ from bot.utils import showImage, update, load_exchange
 
 @pytest.fixture
 def example_response():
-    return "Thank you for this dump. I hope you have a lovely day!"
+    return str({"status":"ok"})
 
 
 @pytest.fixture
 def example_link():
-    return "http://ptsv2.com/t/tpl7h-1621201236/post"
+    return "https://reputate-backend.ru/"
 
 
 # def test_show_image():
