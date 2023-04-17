@@ -18,9 +18,9 @@ def showImage(good, bad):  # список по 4 координаты свобо
 
 
 def update(link):
-    r = requests.get(link).text
+    r = requests.get(link, verify=False).text
     return r
 
 
 def load_exchange(URL):
-    return requests.get(URL).text
+    return requests.get(URL, verify=False).text
