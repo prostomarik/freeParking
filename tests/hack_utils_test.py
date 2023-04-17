@@ -6,7 +6,7 @@ from bot.utils import showImage, update, load_exchange
 
 @pytest.fixture
 def example_response():
-    return str({"status":"ok"})
+    return '{"status":"ok"}'
 
 
 @pytest.fixture
